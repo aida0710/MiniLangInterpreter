@@ -42,8 +42,15 @@ function interpret($ast) : mixed {
                 break;
             case '+':
                 return array_sum($args);
+            case '-':
+                return $args[0] - $args[1];
             case '*':
                 return array_product($args);
+            case '/':
+                if ($args[1] === 0) {
+                    throw new Exception("Divide by zero error");
+                }
+                return $args[0] / $args[1];
             default:
                 throw new Exception("Unknown function: $func");
         }
@@ -51,7 +58,7 @@ function interpret($ast) : mixed {
     return $ast;
 }
 
-$src = "print ( + 5 ( * 4 2 ) )";
+$src = "print ( / 5 ( - 4 2 ) )";
 $tokens = tokenizer($src);
 $ast = parse($tokens);
 interpret($ast);
